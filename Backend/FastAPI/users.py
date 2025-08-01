@@ -23,3 +23,16 @@ databese_users = [User(id=1, name="Dayelin", surname="Ramirez", age= 26, educaci
                 User(id=2, name="Juan", surname="Perez", age=29, educacion="Ingenieria en Sistemas"),
                 User(id=3, name="Maria", surname="Lopez", age=37, educacion="Contabilidad")
                 ]
+
+# ruta principal 
+@app.get("/")
+def get_users():
+    return databese_users
+
+# path que se usa para buscar un usuario por su id
+@app.get("/user_path/{user_id}")
+def get_user(user_id: int):
+    for user in databese_users:
+        if user.id == user_id:
+            return {"Usuario encontrado con exito ✅": user}
+    return {"error ❌": "User not found"}
