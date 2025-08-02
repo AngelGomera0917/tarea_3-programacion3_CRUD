@@ -27,12 +27,12 @@ databese_users = [User(id=1, name="Dayelin", surname="Ramirez", age= 26, educaci
 # Get
 # =================== # ruta principal con get que devuelve todos los usuarios # =================== #
 @app.get("/")
-def get_users():
+async def get_users():
     return databese_users
 
 # ======================= # path que se usa para buscar un usuario por su id # ===================== #
 @app.get("/user_path/{user_id}")
-def get_user(user_id: int):
+async def get_user(user_id: int):
     for user in databese_users:
         if user.id == user_id:
             return {"Usuario encontrado con exito ✅": user}
@@ -41,7 +41,7 @@ def get_user(user_id: int):
 
         # ======================= # Post para agregar un nuevo usuario # ======================= #
 @app.post("/user_post/", status_code=201)
-def post_user(user: User):
+async def post_user(user: User):
     
     for existing_user in databese_users:
         if existing_user.id == user.id:
@@ -55,4 +55,16 @@ def post_user(user: User):
         
     databese_users.append(user)
     return {"Nuevo usuario agregado con exito ✅": user} 
+
+
+# ======================= # Put para actualizar un usuario por su id # ======================= #
+@app.put("/user_put/")
+async def put_user(user: User):
+    
+    for index, existing_user in enumerate(databese_users):
+        if existing_user.id == user.id:
+            databese_users[index] = user
+            return {"Usuario actualizado con exito ✅": user}
+    
+    raise HTTPException(status_code=404, detail = {"error ❌": "User not found"}) 
 
